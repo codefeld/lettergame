@@ -1,0 +1,18 @@
+from flask import Flask, render_template
+
+game = Flask(__name__)
+
+@game.route("/")
+def index():
+	return render_template("index.html")
+
+@game.route("/hello/<string:name>/")
+def hello(name):
+	return render_template("hello.html", name=name)
+
+@game.route("/game/new", methods = ['POST'])
+def new_game():
+	return render_template("game.html")
+
+if __name__ == "__main__":
+	game.run()
