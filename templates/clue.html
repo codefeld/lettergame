@@ -1,12 +1,27 @@
 <p>Give your friend a clue by using letters from their word!</p>
 <p>Their word is:</p>
-<h2>E A R T H</h2>
+<button onclick="updateClue('E')" type="button">E</button>
+<button onclick="updateClue('A')" type="button">A</button>
+<button onclick="updateClue('R')" type="button">R</button>
+<button onclick="updateClue('T')" type="button">T</button>
+<button onclick="updateClue('H')" type="button">H</button>
 <p>You can also use these extra letters or a wild card.</p>
-<h2>I S G N *</h2>
+<button onclick="updateClue('I')" type="button">I</button>
+<button onclick="updateClue('S')" type="button">S</button>
+<button onclick="updateClue('G')" type="button">G</button>
+<button onclick="updateClue('N')" type="button">N</button>
+<button onclick="updateClue('*')" type="button">*</button>
 <p>Your clue will be:</p>
-<p>_ _ _ _ _</p>
+<p id="clue">_ _ _ _ _</p>
 <button type="button">Backspace</button>
 <form action="/clue/new" method="post" id="form1">
 </form>
 
 <button type="submit" form="form1" value="Submit">Enter</button> 
+
+<script>
+function updateClue(letter) {
+	console.log(letter)
+	document.getElementById("clue").textContent = letter
+}
+</script>
