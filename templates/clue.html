@@ -12,8 +12,8 @@
 <button onclick="updateClue('N')" type="button">N</button>
 <button onclick="updateClue('*')" type="button">*</button>
 <p>Your clue will be:</p>
-<p id="clue">_ _ _ _ _</p>
-<button type="button">Backspace</button>
+<div id="clue"></div>
+<button onclick="backspace()" type="button">Backspace</button>
 <form action="/clue/new" method="post" id="form1">
 </form>
 
@@ -22,6 +22,19 @@
 <script>
 function updateClue(letter) {
 	console.log(letter)
-	document.getElementById("clue").textContent = letter
+	const span = document.createElement("span")
+	const node = document.createTextNode(letter)
+	span.appendChild(node)
+
+	const element = document.getElementById("clue")
+	element.appendChild(span)
+}
+
+function backspace() {
+	const clue = document.getElementById("clue")
+	
+	if (clue.lastChild != null) {
+		clue.lastChild.remove()
+	}
 }
 </script>
