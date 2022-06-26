@@ -14,5 +14,9 @@ def hello(name):
 def new_game():
 	return render_template("game.html")
 
+@game.route("/clue")
+def give_clue():
+	return render_template("clue.html")
+
 if __name__ == "__main__":
 	game.run()
