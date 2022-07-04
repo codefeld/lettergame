@@ -1,27 +1,29 @@
 <p>Give your friend a clue by using letters from their word!</p>
 <p>Their word is:</p>
-<button onclick="updateClue('E')" type="button">E</button>
-<button onclick="updateClue('A')" type="button">A</button>
-<button onclick="updateClue('R')" type="button">R</button>
-<button onclick="updateClue('T')" type="button">T</button>
-<button onclick="updateClue('H')" type="button">H</button>
+<button onclick="updateClues('E')" type="button">E</button>
+<button onclick="updateClues('A')" type="button">A</button>
+<button onclick="updateClues('R')" type="button">R</button>
+<button onclick="updateClues('T')" type="button">T</button>
+<button onclick="updateClues('H')" type="button">H</button>
 <p>You can also use these extra letters or a wild card.</p>
-<button onclick="updateClue('I')" type="button">I</button>
-<button onclick="updateClue('S')" type="button">S</button>
-<button onclick="updateClue('G')" type="button">G</button>
-<button onclick="updateClue('N')" type="button">N</button>
-<button onclick="updateClue('*')" type="button">*</button>
+<button onclick="updateClues('I')" type="button">I</button>
+<button onclick="updateClues('S')" type="button">S</button>
+<button onclick="updateClues('G')" type="button">G</button>
+<button onclick="updateClues('N')" type="button">N</button>
+<button onclick="updateClues('*')" type="button">*</button>
 <p>Your clue will be:</p>
 <div id="clue"></div>
+<p>Your friend will see:</p>
+<div id="clue_clue"></div>
 <button onclick="backspace()" type="button">Backspace</button>
 <form action="/clue/new" method="post" id="form1">
 </form>
 
-<button type="submit" form="form1" value="Submit">Enter</button> 
+<button type="submit" form="form1" value="Submit">Enter</button>
 
 <script>
+const word = "EARTH"
 function updateClue(letter) {
-	console.log(letter)
 	const span = document.createElement("span")
 	const node = document.createTextNode(letter)
 	span.appendChild(node)
@@ -30,11 +32,36 @@ function updateClue(letter) {
 	element.appendChild(span)
 }
 
+function updateClueClue(letter) {
+
+	if (word.indexOf(letter) > -1) {
+		letter = "?"
+	}
+
+	const span2 = document.createElement("span")
+	const node2 = document.createTextNode(letter)
+	span2.appendChild(node2)
+
+	const element2 = document.getElementById("clue_clue")
+	element2.appendChild(span2)
+}
+
+function updateClues(letter) {
+	updateClue(letter)
+	updateClueClue(letter)
+}
+
 function backspace() {
 	const clue = document.getElementById("clue")
 	
 	if (clue.lastChild != null) {
 		clue.lastChild.remove()
+	}
+
+	const clue2 = document.getElementById("clue_clue")
+	
+	if (clue2.lastChild != null) {
+		clue2.lastChild.remove()
 	}
 }
 </script>
