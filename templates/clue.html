@@ -12,23 +12,30 @@
 <button onclick="updateClues('N')" type="button">N</button>
 <button onclick="updateClues('*')" type="button">*</button>
 <p>Your clue will be:</p>
-<div id="clue"></div>
+<div id="clue_show"></div>
 <p>Your friend will see:</p>
 <div id="clue_clue"></div>
 <button onclick="backspace()" type="button">Backspace</button>
 <form action="/clue/new" method="post" id="form1">
+	<input type="hidden" id="clue" name="clue" value="">
 </form>
 
 <button type="submit" form="form1" value="Submit">Enter</button>
 
 <script>
 const word = "EARTH"
+
+window.addEventListener("load", function(){
+	const clueElement = document.getElementById("clue")
+	clueElement.value = ""
+});
+
 function updateClue(letter) {
 	const span = document.createElement("span")
 	const node = document.createTextNode(letter)
 	span.appendChild(node)
 
-	const element = document.getElementById("clue")
+	const element = document.getElementById("clue_show")
 	element.appendChild(span)
 }
 
@@ -46,13 +53,23 @@ function updateClueClue(letter) {
 	element2.appendChild(span2)
 }
 
+function updateClueForm(letter) {
+	if (word.indexOf(letter) > -1) {
+		letter = "?"
+	}
+
+	const clueElement = document.getElementById("clue")
+	clueElement.value = clueElement.value + letter
+}
+
 function updateClues(letter) {
 	updateClue(letter)
 	updateClueClue(letter)
+	updateClueForm(letter)
 }
 
 function backspace() {
-	const clue = document.getElementById("clue")
+	const clue = document.getElementById("clue_show")
 	
 	if (clue.lastChild != null) {
 		clue.lastChild.remove()
@@ -62,6 +79,12 @@ function backspace() {
 	
 	if (clue2.lastChild != null) {
 		clue2.lastChild.remove()
+	}
+
+	const clue3 = document.getElementById("clue")
+	
+	if (clue3.value != "") {
+		clue3.value = clue3.value.substring(0, clue3.value.length - 1)
 	}
 }
 </script>

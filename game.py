@@ -18,5 +18,9 @@ def new_game():
 def give_clue():
 	return render_template("clue.html")
 
+@game.route("/game/<string:id>/clue", methods = ['POST'])
+def new_clue():
+	return render_template(".html")
+
 if __name__ == "__main__":
 	game.run()
