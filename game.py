@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request
+import os.path
+import random
 
 game = Flask(__name__)
 
@@ -12,7 +14,11 @@ def hello(name):
 
 @game.route("/game/new", methods = ['POST'])
 def new_game():
-	return render_template("game.html")
+	f = open(os.path.join("data", "words.txt"))
+	words = f.readlines()
+	w = random.choice(words)
+	word = w.strip()
+	return render_template("game.html", word=word)
 
 @game.route("/clue", methods = ['POST', 'GET'])
 def give_clue():
