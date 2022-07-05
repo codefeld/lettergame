@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 game = Flask(__name__)
 
@@ -14,13 +14,14 @@ def hello(name):
 def new_game():
 	return render_template("game.html")
 
-@game.route("/clue")
+@game.route("/clue", methods = ['POST', 'GET'])
 def give_clue():
-	return render_template("clue.html")
-
-@game.route("/game/<string:id>/clue", methods = ['POST'])
-def new_clue():
-	return render_template(".html")
+	if request.method == 'GET':
+		return render_template("clue.html")
+	elif request.method == 'POST':
+		form_data = request.form
+		print(form_data)
+		return render_template("clue_share.html", clue = form_data["clue"])
 
 if __name__ == "__main__":
 	game.run()
