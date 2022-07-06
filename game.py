@@ -34,7 +34,7 @@ def new_game():
 def give_clue(key):
 	game = games[key]
 	if request.method == 'GET':
-		return render_template("clue.html", word=game.word)
+		return render_template("clue.html", word=game.word, uuid=game.key)
 	elif request.method == 'POST':
 		form_data = request.form
 		print(form_data)
