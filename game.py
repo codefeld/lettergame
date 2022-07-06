@@ -8,7 +8,7 @@ class Game:
 		f = open(os.path.join("data", "words.txt"))
 		words = f.readlines()
 		w = random.choice(words)
-		self.word = w.strip()
+		self.word = w.strip().upper()
 		self.key = str(uuid.uuid4())
 
 app = Flask(__name__)
@@ -26,7 +26,8 @@ def hello(name):
 def new_game():
 	game = Game()
 	games[game.key] = game
-	print(game.key)
+	print("http://localhost:5000/game/{}/clue".format(game.key))
+	print(game.word)
 	return render_template("game.html")
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
