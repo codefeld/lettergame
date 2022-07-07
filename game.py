@@ -10,6 +10,10 @@ class Game:
 		w = random.choice(words)
 		self.word = w.strip().upper()
 		self.key = str(uuid.uuid4())
+		self.clues = []
+
+	def add_clue(self, clue):
+		self.clues.append(clue)
 
 app = Flask(__name__)
 games = {}
@@ -38,7 +42,14 @@ def give_clue(key):
 	elif request.method == 'POST':
 		form_data = request.form
 		print(form_data)
+		game.add_clue(form_data["clue"])
+		print("http://localhost:5000/game/{}/guess".format(game.key))
 		return render_template("clue_share.html", clue = form_data["clue"])
+
+@app.route("/game/<string:key>/guess")
+def guess(key):
+	game = games[key]
+	return render_template("guess.html", word=game.word, uuid=game.key, clues=game.clues)
 
 if __name__ == "__main__":
 	app.run()

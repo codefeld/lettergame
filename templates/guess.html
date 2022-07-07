@@ -1,0 +1,7 @@
+<p>Your clues are:</p>
+{% for clue in clues %}
+<h2>{{ clue }}</h2>
+{% endfor %}
+<form action="/game/{{uuid}}/guess" method="post" id="form1">
+	<input type="text" id="guess" name="guess" value="">
+</form>
