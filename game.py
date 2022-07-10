@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from flask import Flask, render_template, request
 import os.path
 import random
@@ -46,10 +47,19 @@ def give_clue(key):
 		print("http://localhost:5000/game/{}/guess".format(game.key))
 		return render_template("clue_share.html", clue = form_data["clue"])
 
-@app.route("/game/<string:key>/guess")
+@app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
 	game = games[key]
-	return render_template("guess.html", word=game.word, uuid=game.key, clues=game.clues)
+	if request.method == "GET":
+		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False)
+	elif request.method == "POST":
+		form_data = request.form
+		print(form_data)
+		guess = form_data["guess"]
+		if guess.strip().upper() == game.word:
+			return render_template("win.html", word=game.word)
+		else:
+			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True)
 
 if __name__ == "__main__":
 	app.run()

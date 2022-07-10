@@ -1,7 +1,12 @@
+{% if wrong_guess %}
+<p><span style = "color:red">Incorrect Guess! Try again</span></p>
+{% endif %}
 <p>Your clues are:</p>
 {% for clue in clues %}
-<h2>{{ clue }}</h2>
+<h3>{{ clue }}</h3>
 {% endfor %}
 <form action="/game/{{uuid}}/guess" method="post" id="form1">
 	<input type="text" id="guess" name="guess" value="">
 </form>
+
+<button type="submit" form="form1" value="Submit">Enter</button>
