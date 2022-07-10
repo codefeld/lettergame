@@ -6,10 +6,9 @@
 <button onclick="updateClues('{{word[3]}}')" type="button">{{word[3]}}</button>
 <button onclick="updateClues('{{word[4]}}')" type="button">{{word[4]}}</button>
 <p>You can also use these extra letters or a wild card.</p>
-<button onclick="updateClues('I')" type="button">I</button>
-<button onclick="updateClues('S')" type="button">S</button>
-<button onclick="updateClues('G')" type="button">G</button>
-<button onclick="updateClues('N')" type="button">N</button>
+{% for letter in letters %}
+<button onclick="updateClues('{{letter}}')" type="button">{{letter}}</button>
+{% endfor %}
 <button onclick="updateClues('*')" type="button">*</button>
 <p>Your clue will be:</p>
 <div id="clue_show"></div>
