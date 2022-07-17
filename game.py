@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request
+from dotenv import load_dotenv
 import os.path
 import random
 import uuid
+import os
+import psycopg2
+
+load_dotenv()
+
+DATABASE_URL = os.environ['DATABASE_URL']
 
 EXTRA_LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "w", "y"]
 
@@ -39,6 +46,7 @@ def hello(name):
 
 @app.route("/game/new", methods = ['POST'])
 def new_game():
+	# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	game = Game()
 	games[game.key] = game
 	clue_url = "/game/{}/clue".format(game.key)
