@@ -5,7 +5,6 @@ import os.path
 import random
 import uuid
 import os
-import psycopg2
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
