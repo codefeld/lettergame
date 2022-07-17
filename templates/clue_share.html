@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<p>Congrats! You've sent your friend this clue:</p>
-<h2 id="clue">{{clue}}</h2>
-<button type="button">Share</button>
+<div class="container" style="text-align: center">
+	<p>Congrats! You've sent your friend this clue:</p>
+	<h2 id="clue">{{clue}}</h2>
+	<hr class="col-3 col-md-2">
+	<button type="button" class="btn btn-success">Share</button>
+</div>
 {% endblock %}
 
