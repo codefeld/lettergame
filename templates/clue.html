@@ -1,27 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container" style="text-align: center">
 <p>Give your friend a clue by using letters from their word!</p>
-<p>Their word is:</p>
-<button onclick="updateClues('{{word[0]}}')" type="button">{{word[0]}}</button>
-<button onclick="updateClues('{{word[1]}}')" type="button">{{word[1]}}</button>
-<button onclick="updateClues('{{word[2]}}')" type="button">{{word[2]}}</button>
-<button onclick="updateClues('{{word[3]}}')" type="button">{{word[3]}}</button>
-<button onclick="updateClues('{{word[4]}}')" type="button">{{word[4]}}</button>
+<p>Your friend's word is:</p>
+<button onclick="updateClues('{{word[0]}}')" type="button" class="btn btn-primary btn-lg">{{word[0]}}</button>
+<button onclick="updateClues('{{word[1]}}')" type="button" class="btn btn-primary btn-lg">{{word[1]}}</button>
+<button onclick="updateClues('{{word[2]}}')" type="button" class="btn btn-primary btn-lg">{{word[2]}}</button>
+<button onclick="updateClues('{{word[3]}}')" type="button" class="btn btn-primary btn-lg">{{word[3]}}</button>
+<button onclick="updateClues('{{word[4]}}')" type="button" class="btn btn-primary btn-lg">{{word[4]}}</button>
+<hr class="col-3 col-md-2">
 <p>You can also use these extra letters or a wild card.</p>
 {% for letter in letters %}
-<button onclick="updateClues('{{letter}}')" type="button">{{letter}}</button>
+<button onclick="updateClues('{{letter}}')" type="button" class="btn btn-warning btn-lg">{{letter}}</button>
 {% endfor %}
-<button onclick="updateClues('*')" type="button">*</button>
+<button onclick="updateClues('*')" type="button" class="btn btn-secondary btn-lg">*</button>
+<hr class="col-3 col-md-2">
 <p>Your clue will be:</p>
 <div id="clue_show"></div>
+<hr class="col-3 col-md-2">
 <p>Your friend will see:</p>
 <div id="clue_clue"></div>
-<button onclick="backspace()" type="button">Backspace</button>
+<hr class="col-3 col-md-2">
 <form action="/game/{{uuid}}/clue" method="post" id="form1">
 	<input type="hidden" id="clue" name="clue" value="">
 </form>
-
-<button type="submit" form="form1" value="Submit">Enter</button>
+<button onclick="backspace()" type="button" class="btn btn-danger">Backspace</button>
+<button type="submit" form="form1" value="Submit" class="btn btn-success">Enter</button>
 
 <script>
 
@@ -42,17 +46,24 @@ function updateClue(letter) {
 }
 
 function updateClueClue(letter) {
-
+	style = "btn btn-warning btn-lg"
 	if (word.indexOf(letter) > -1) {
 		letter = "?"
+		style = "btn btn-primary btn-lg"
+	} else if (letter === "*") {
+		style = "btn btn-secondary btn-lg"
 	}
 
-	const span2 = document.createElement("span")
+	const button = document.createElement("button")
 	const node2 = document.createTextNode(letter)
-	span2.appendChild(node2)
+	button.appendChild(node2)
+	button.className = style
 
 	const element2 = document.getElementById("clue_clue")
-	element2.appendChild(span2)
+	element2.appendChild(button)
+
+	const space = document.createTextNode(" ")
+	element2.appendChild(space)
 }
 
 function updateClueForm(letter) {
@@ -81,6 +92,7 @@ function backspace() {
 	
 	if (clue2.lastChild != null) {
 		clue2.lastChild.remove()
+		clue2.lastChild.remove()
 	}
 
 	const clue3 = document.getElementById("clue")
@@ -90,4 +102,5 @@ function backspace() {
 	}
 }
 </script>
+</div>
 {% endblock %}

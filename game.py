@@ -42,9 +42,10 @@ def hello(name):
 def new_game():
 	game = Game()
 	games[game.key] = game
-	print("http://localhost:5000/game/{}/clue".format(game.key))
+	clue_url = "/game/{}/clue".format(game.key)
+	print( "http://localhost:5000{}".format(clue_url))
 	print(game.word)
-	return render_template("game.html")
+	return render_template("game.html", clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
