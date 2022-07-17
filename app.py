@@ -1,14 +1,34 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
+import os
 import os.path
 import random
 import uuid
 import os
 import psycopg2
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL=os.environ['DATABASE_URL']
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+class BaseConfig(object):
+    DEBUG = False
+    TESTING = False
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+app = Flask(__name__, instance_relative_config=True)
+app.config.from_object(BaseConfig)
+db = SQLAlchemy()
+db.init_app(app)
+migrate = Migrate(app, db)
 
 EXTRA_LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "w", "y"]
 
@@ -21,7 +41,13 @@ def random_letters(word):
 				letters.append(letter)
 	return letters
 
-class Game:
+class Game(db.Model):
+	__tablename__ = 'games'
+
+	id = db.Column(db.Integer, primary_key=True)
+	word = db.Column(db.String(255))
+	key = db.Column(db.String(255))
+
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
 		words = f.readlines()
@@ -33,7 +59,13 @@ class Game:
 	def add_clue(self, clue):
 		self.clues.append(clue)
 
-app = Flask(__name__)
+	def save_game(self):
+		db.session.add(self)
+		db.session.commit()
+
+	def __repr__(self):
+		return f'Game is {self.key}'
+
 games = {}
 
 @app.route("/")
@@ -46,12 +78,12 @@ def hello(name):
 
 @app.route("/game/new", methods = ['POST'])
 def new_game():
-	# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	game = Game()
 	games[game.key] = game
 	clue_url = "/game/{}/clue".format(game.key)
 	print( "http://localhost:5000{}".format(clue_url))
 	print(game.word)
+	game.save_game()
 	return render_template("game.html", clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])

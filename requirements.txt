@@ -1,4 +1,5 @@
 gunicorn
-flask
-psycopg2
+Flask==2.1.3
+Flask-Migrate
 python-dotenv
+flask-sqlalchemy
