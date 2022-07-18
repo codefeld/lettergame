@@ -11,12 +11,13 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
 
+# Load the .env file and populate DATABASE_URL
 load_dotenv()
-
 DATABASE_URL=os.environ['DATABASE_URL']
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
+# Define the configuration for the Flask app
 class BaseConfig(object):
     DEBUG = False
     TESTING = False
@@ -25,6 +26,8 @@ class BaseConfig(object):
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object(BaseConfig)
+
+# Create a database and init. Create a migrate to be used by `flask db migrate`
 db = SQLAlchemy()
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -44,8 +47,9 @@ class Game(db.Model):
 	__tablename__ = 'games'
 
 	id = db.Column(db.Integer, primary_key=True)
-	word = db.Column(db.String(255))
-	key = db.Column(db.String(255))
+	word = db.Column(db.String(255), nullable=False)
+	key = db.Column(db.String(255), unique=True, nullable=False)
+	clues = db.Column(db.PickleType)
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
@@ -56,7 +60,7 @@ class Game(db.Model):
 		self.clues = []
 
 	def add_clue(self, clue):
-		self.clues.append(clue)
+		self.clues = self.clues + [clue]
 
 	def save_game(self):
 		db.session.add(self)
@@ -64,8 +68,6 @@ class Game(db.Model):
 
 	def __repr__(self):
 		return f'Game is {self.key}'
-
-games = {}
 
 @app.route("/")
 def index():
@@ -78,16 +80,15 @@ def hello(name):
 @app.route("/game/new", methods = ['POST'])
 def new_game():
 	game = Game()
-	games[game.key] = game
 	clue_url = "/game/{}/clue".format(game.key)
-	print( "http://localhost:5000{}".format(clue_url))
+	print( "http://127.0.0.1:5000{}".format(clue_url))
 	print(game.word)
 	game.save_game()
 	return render_template("game.html", clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
-	game = games[key]
+	game = Game.query.filter_by(key=key).first()
 	if request.method == 'GET':
 		letters = random_letters(game.word)
 		return render_template("clue.html", word=game.word, uuid=game.key, letters=letters)
@@ -95,12 +96,16 @@ def give_clue(key):
 		form_data = request.form
 		print(form_data)
 		game.add_clue(form_data["clue"])
-		print("http://localhost:5000/game/{}/guess".format(game.key))
+		game.save_game()
+		print(game.clues)
+		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
 		return render_template("clue_share.html", clue = form_data["clue"])
 
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
-	game = games[key]
+	game = Game.query.filter_by(key=key).first()
+	print(game.word)
+	print(game.clues)
 	if request.method == "GET":
 		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False)
 	elif request.method == "POST":
