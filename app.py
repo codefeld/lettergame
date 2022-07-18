@@ -62,7 +62,7 @@ class Game(db.Model):
 	def add_clue(self, clue):
 		self.clues = self.clues + [clue]
 
-	def save_game(self):
+	def save(self):
 		db.session.add(self)
 		db.session.commit()
 
@@ -83,7 +83,7 @@ def new_game():
 	clue_url = "/game/{}/clue".format(game.key)
 	print( "http://127.0.0.1:5000{}".format(clue_url))
 	print(game.word)
-	game.save_game()
+	game.save()
 	return render_template("game.html", clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
@@ -96,7 +96,7 @@ def give_clue(key):
 		form_data = request.form
 		print(form_data)
 		game.add_clue(form_data["clue"])
-		game.save_game()
+		game.save()
 		print(game.clues)
 		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
 		return render_template("clue_share.html", clue = form_data["clue"])
