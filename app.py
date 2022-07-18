@@ -50,6 +50,7 @@ class Game(db.Model):
 	word = db.Column(db.String(255), nullable=False)
 	key = db.Column(db.String(255), unique=True, nullable=False)
 	clues = db.Column(db.PickleType)
+	guesses = db.Column(db.PickleType)
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
@@ -113,7 +114,8 @@ def guess(key):
 		print(form_data)
 		guess = form_data["guess"]
 		if guess.strip().upper() == game.word:
-			return render_template("win.html", word=game.word)
+			total_clues = len(game.clues)
+			return render_template("win.html", word=game.word, total_clues=total_clues)
 		else:
 			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True)
 
