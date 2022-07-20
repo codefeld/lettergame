@@ -112,6 +112,7 @@ def give_clue(key):
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
 	game = Game.query.filter_by(key=key).first()
+	clue_url = "/game/{}/clue".format(game.key)
 	print(game.word)
 	print(game.clues)
 	if request.method == "GET":
@@ -127,7 +128,7 @@ def guess(key):
 			total_guesses = len(game.guesses)
 			return render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
 		else:
-			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True)
+			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url)
 
 if __name__ == "__main__":
 	app.run()

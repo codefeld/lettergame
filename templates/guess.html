@@ -4,27 +4,53 @@
 	{% if wrong_guess %}
 	<p><span style = "color:red">Incorrect Guess! Try again</span></p>
 	{% endif %}
-	<p>Your clues are:</p>
-	{% for clue in clues %}
-		{% for letter in clue %}
-			{% if letter == "?" %}
-			<button type="button" class="btn btn-primary">?</button>
-			{% elif letter == "*" %}
-			<button type="button" class="btn btn-secondary">*</button>
-			{% else %}
-			<button type="button" class="btn btn-warning">{{ letter }}</button>
-			{% endif %}
+	{% if clues|length > 0 %}
+		<p>Your clues are:</p>
+		{% for clue in clues %}
+			{% for letter in clue %}
+				{% if letter == "?" %}
+				<button type="button" class="btn btn-primary">?</button>
+				{% elif letter == "*" %}
+				<button type="button" class="btn btn-secondary">*</button>
+				{% else %}
+				<button type="button" class="btn btn-warning">{{ letter }}</button>
+				{% endif %}
+			{% endfor %}
+			<hr class="col-3 col-md-2">
 		{% endfor %}
-		<hr class="col-3 col-md-2">
-	{% endfor %}
-	<form action="/game/{{uuid}}/guess" method="post" id="form1">
-		<div class="row d-flex justify-content-center">
-			<div class="col-3 col-md-3 center-block">
-				<input maxlength="5" style="text-transform: uppercase;  text-align: center !Important;" class="form-control" id="guess" name="guess" value="" type="text" placeholder="enter guess">
+		<form action="/game/{{uuid}}/guess" method="post" id="form1">
+			<div class="row d-flex justify-content-center">
+				<div class="col-3 col-md-3 center-block">
+					<input maxlength="5" style="text-transform: uppercase;  text-align: center !Important;" class="form-control" id="guess" name="guess" value="" type="text" placeholder="enter guess">
+				</div>
 			</div>
-		</div>
-	</form>
-	<hr class="col-3 col-md-2">
-	<button type="submit" form="form1" value="Submit" class="btn btn-success">Enter</button>
+		</form>
+		<hr class="col-3 col-md-2">
+		<button type="submit" form="form1" value="Submit" class="btn btn-success">Enter</button>
+	{% else %}
+		<p>You don't have any clues yet!</p>
+		<hr class="col-3 col-md-2">
+	<button type="button" id="share" class="btn btn-success">Share</button>
+	{% endif %}
+	<button type="button" class="btn btn-info" onclick="location.reload(true)">Refresh</button>
 </div>
+
+<script>
+
+window.addEventListener("load", function(){
+	const shareButton = document.getElementById("share")
+	shareButton.addEventListener('click', event => {
+		if (navigator.share) {
+		navigator.share({
+			title: 'Letter Game',
+			url: 'https://' + window.location.host + '{{clue_url}}',
+			text: 'I need a clue to guess this word.'
+		})
+		.catch(console.error);
+		}
+	});
+});
+
+</script>
+
 {% endblock %}
