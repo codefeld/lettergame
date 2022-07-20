@@ -4,7 +4,30 @@
 	<p>Guess this five-letter word by asking your friends for clues!</p>
 	<h2>? ? ? ? ?</h2>
 	<hr class="col-3 col-md-2">
-	<button type="button" class="btn btn-primary">Share</button>
+	<button type="button" class="btn btn-success" id="share">Share</button>
 	<button type="button" class="btn btn-secondary">View Clues</button>
 </div>
+
+<script>
+
+window.addEventListener("load", function(){
+	const shareButton = document.getElementById("share")
+	shareButton.addEventListener('click', event => {
+	  if (navigator.share) {
+		navigator.share({
+		  title: 'Letter Game',
+		  url: 'https://' + window.location.host + '{{clue_url}}',
+		  text: 'I need a clue to guess this word.'
+		}).then(() => {
+		  console.log('Thanks for sharing!');
+		})
+		.catch(console.error);
+	  } else {
+		shareDialog.classList.add('is-open');
+	  }
+	});
+});
+
+</script>
+
 {% endblock %}
