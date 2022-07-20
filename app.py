@@ -88,10 +88,11 @@ def hello(name):
 def new_game():
 	game = Game()
 	clue_url = "/game/{}/clue".format(game.key)
+	guess_url = "/game/{}/guess".format(game.key)
 	print( "http://127.0.0.1:5000{}".format(clue_url))
 	print(game.word)
 	game.save()
-	return render_template("game.html", clue_url=clue_url)
+	return render_template("game.html", clue_url=clue_url, guess_url=guess_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):

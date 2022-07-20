@@ -4,8 +4,9 @@
 	<p>Guess this five-letter word by asking your friends for clues!</p>
 	<h2>? ? ? ? ?</h2>
 	<hr class="col-3 col-md-2">
-	<button type="button" class="btn btn-success" id="share">Share</button>
-	<button type="button" class="btn btn-secondary">View Clues</button>
+	<button type="button" class="btn btn-success btn-lg" id="share">Share</button>
+	<button type="button" class="btn btn-secondary btn-lg" id="viewClues" 
+	        onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{guess_url}}'" disabled>View Clues</button>
 </div>
 
 <script>
@@ -19,14 +20,21 @@ window.addEventListener("load", function(){
 		  url: 'https://' + window.location.host + '{{clue_url}}',
 		  text: 'I need a clue to guess this word.'
 		}).then(() => {
-		  console.log('Thanks for sharing!');
+			enableViewClues()
 		})
 		.catch(console.error);
 	  } else {
-		shareDialog.classList.add('is-open');
+		enableViewClues()
 	  }
 	});
 });
+
+function enableViewClues() {
+	const style = "btn btn-primary btn-lg"
+	const viewCluesButton = document.getElementById("viewClues")
+	viewCluesButton.className = style
+	viewCluesButton.removeAttribute("disabled")
+}
 
 </script>
 
