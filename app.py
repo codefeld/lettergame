@@ -59,9 +59,15 @@ class Game(db.Model):
 		self.word = w.strip().upper()
 		self.key = str(uuid.uuid4())
 		self.clues = []
+		self.guesses = []
 
 	def add_clue(self, clue):
 		self.clues = self.clues + [clue]
+
+	def add_guess(self, guess):
+		if self.guesses is None:
+			self.guesses = []
+		self.guesses = self.guesses + [guess]
 
 	def save(self):
 		db.session.add(self)
@@ -113,9 +119,12 @@ def guess(key):
 		form_data = request.form
 		print(form_data)
 		guess = form_data["guess"]
+		game.add_guess(form_data["guess"])
+		game.save()
 		if guess.strip().upper() == game.word:
 			total_clues = len(game.clues)
-			return render_template("win.html", word=game.word, total_clues=total_clues)
+			total_guesses = len(game.guesses)
+			return render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
 		else:
 			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True)
 
