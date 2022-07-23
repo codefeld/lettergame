@@ -12,7 +12,51 @@
 		{% endif %}
 	{% endfor %}
 	<hr class="col-3 col-md-2">
-	<button type="button" class="btn btn-success">Share</button>
+	<button type="button" class="btn btn-success" id="share">Share</button>
 </div>
-{% endblock %}
 
+<script>
+
+const clue = "{{clue}}"
+
+window.addEventListener("load", function(){
+	const shareButton = document.getElementById("share")
+	shareButton.addEventListener('click', event => {
+	  if (navigator.share) {
+		var emoji_clue = ""
+		for (var i = 0; i < clue.length; i++) {
+			var letter = clue.charAt(i)
+			if (letter === "1") {
+				emoji_clue += "1️⃣"
+			} else if (letter === "2") {
+				emoji_clue += "2️⃣"
+			} else if (letter === "3") {
+				emoji_clue += "3️⃣"
+			} else if (letter === "4") {
+				emoji_clue += "4️⃣"
+			} else if (letter === "5") {
+				emoji_clue += "5️⃣"
+			} else if (letter === "*") {
+				emoji_clue += "*️⃣"
+			} else {
+				emoji_clue += "🟨"
+			}
+		}
+		var text =  "Here's a clue. Refresh your page to see.\n" + emoji_clue
+		navigator.share({
+		  title: 'Letter Game',
+		  url:  'https://' + window.location.host,
+		  text: text
+		}).then(() => {
+			enableViewClues()
+		})
+		.catch(console.error);
+	  } else {
+		enableViewClues()
+	  }
+	});
+});
+
+</script>
+
+{% endblock %}
