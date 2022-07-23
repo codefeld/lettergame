@@ -47,8 +47,20 @@ function updateClue(letter) {
 
 function updateClueClue(letter) {
 	style = "btn btn-warning btn-lg"
-	if (word.indexOf(letter) > -1) {
-		letter = "?"
+	if (word.indexOf(letter) === 0) {
+		letter = "1"
+		style = "btn btn-primary btn-lg"
+	} else if (word.indexOf(letter) === 1) {
+		letter = "2"
+		style = "btn btn-primary btn-lg"
+	} else if (word.indexOf(letter) === 2) {
+		letter = "3"
+		style = "btn btn-primary btn-lg"
+	} else if (word.indexOf(letter) === 3) {
+		letter = "4"
+		style = "btn btn-primary btn-lg"
+	} else if (word.indexOf(letter) === 4) {
+		letter = "5"
 		style = "btn btn-primary btn-lg"
 	} else if (letter === "*") {
 		style = "btn btn-secondary btn-lg"
@@ -67,8 +79,16 @@ function updateClueClue(letter) {
 }
 
 function updateClueForm(letter) {
-	if (word.indexOf(letter) > -1) {
-		letter = "?"
+	if (word.indexOf(letter) === 0) {
+		letter = "1"
+	} else if (word.indexOf(letter) === 1) {
+		letter = "2"
+	} else if (word.indexOf(letter) === 2) {
+		letter = "3"
+	} else if (word.indexOf(letter) === 3) {
+		letter = "4"
+	} else if (word.indexOf(letter) === 4) {
+		letter = "5"
 	}
 
 	const clueElement = document.getElementById("clue")

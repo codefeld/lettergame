@@ -8,8 +8,8 @@
 		<p>Your clues are:</p>
 		{% for clue in clues %}
 			{% for letter in clue %}
-				{% if letter == "?" %}
-				<button type="button" class="btn btn-primary">?</button>
+				{% if letter|int != 0 %}
+				<button type="button" class="btn btn-primary">{{ letter }}</button>
 				{% elif letter == "*" %}
 				<button type="button" class="btn btn-secondary">*</button>
 				{% else %}
@@ -20,7 +20,7 @@
 		{% endfor %}
 		<form action="/game/{{uuid}}/guess" method="post" id="form1">
 			<div class="row d-flex justify-content-center">
-				<div class="col-3 col-md-3 center-block">
+				<div class="col-5 col-md-5 center-block">
 					<input maxlength="5" style="text-transform: uppercase;  text-align: center !Important;" class="form-control" id="guess" name="guess" value="" type="text" placeholder="enter guess">
 				</div>
 			</div>

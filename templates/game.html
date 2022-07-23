@@ -2,11 +2,15 @@
 {% block content %}
 <div class="container" style="text-align: center">
 	<p>Guess this five-letter word by asking your friends for clues!</p>
-	<h2>? ? ? ? ?</h2>
+	<button type="button" class="btn btn-primary btn-lg">1</button>
+	<button type="button" class="btn btn-primary btn-lg">2</button>
+	<button type="button" class="btn btn-primary btn-lg">3</button>
+	<button type="button" class="btn btn-primary btn-lg">4</button>
+	<button type="button" class="btn btn-primary btn-lg">5</button>
 	<hr class="col-3 col-md-2">
 	<button type="button" class="btn btn-success btn-lg" id="share">Share</button>
 	<button type="button" class="btn btn-secondary btn-lg" id="viewClues" 
-	        onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{guess_url}}'" disabled>View Clues</button>
+			onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{guess_url}}'" disabled>View Clues</button>
 </div>
 
 <script>
