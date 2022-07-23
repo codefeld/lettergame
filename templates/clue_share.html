@@ -2,7 +2,15 @@
 {% block content %}
 <div class="container" style="text-align: center">
 	<p>Congrats! You've sent your friend this clue:</p>
-	<h2 id="clue">{{clue}}</h2>
+	{% for letter in clue %}
+		{% if letter|int != 0 %}
+		<button type="button" class="btn btn-primary">{{ letter }}</button>
+		{% elif letter == "*" %}
+		<button type="button" class="btn btn-secondary">*</button>
+		{% else %}
+		<button type="button" class="btn btn-warning">{{ letter }}</button>
+		{% endif %}
+	{% endfor %}
 	<hr class="col-3 col-md-2">
 	<button type="button" class="btn btn-success">Share</button>
 </div>

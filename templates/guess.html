@@ -9,11 +9,11 @@
 		{% for clue in clues %}
 			{% for letter in clue %}
 				{% if letter|int != 0 %}
-				<button type="button" class="btn btn-primary">{{ letter }}</button>
+				<button type="button" class="btn btn-primary btn-lg">{{ letter }}</button>
 				{% elif letter == "*" %}
-				<button type="button" class="btn btn-secondary">*</button>
+				<button type="button" class="btn btn-secondary btn-lg">*</button>
 				{% else %}
-				<button type="button" class="btn btn-warning">{{ letter }}</button>
+				<button type="button" class="btn btn-warning btn-lg">{{ letter }}</button>
 				{% endif %}
 			{% endfor %}
 			<hr class="col-3 col-md-2">
