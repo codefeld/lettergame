@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from dotenv import load_dotenv
 import os
 import os.path
@@ -88,11 +88,16 @@ def new_game():
 	print( "http://127.0.0.1:5000{}".format(clue_url))
 	print(game.word)
 	game.save()
-	return render_template("game.html", clue_url=clue_url, guess_url=guess_url)
+	resp = make_response(render_template("game.html", clue_url=clue_url, guess_url=guess_url))
+	resp.set_cookie('game_key', game.key)
+	return resp
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
 	game = Game.query.filter_by(key=key).first()
+	cookie_game_key = request.cookies.get('game_key')
+	if cookie_game_key == game.key:
+		return render_template("cheat.html")
 	if request.method == 'GET':
 		letters = random_letters(game.word)
 		return render_template("clue.html", word=game.word, uuid=game.key, letters=letters)
@@ -107,7 +112,11 @@ def give_clue(key):
 
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
-	game = Game.query.filter_by(key=key).first()
+	cookie_game_key = request.cookies.get('game_key')
+	if key != cookie_game_key:
+		# todo: redirect to home if game is finished
+		pass
+	game = Game.query.filter_by(key=cookie_game_key).first()
 	clue_url = "/game/{}/clue".format(game.key)
 	quit_url = "/game/{}/quit".format(game.key)
 	print(game.word)
