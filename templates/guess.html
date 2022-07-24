@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container" style="text-align: center">
 	{% if wrong_guess %}
 	<p><span style = "color:red">Incorrect Guess! Try again</span></p>
 	{% endif %}
@@ -33,7 +32,6 @@
 	<button type="button" id="share" class="btn btn-success btn-lg">Share</button>
 	{% endif %}
 	<button type="button" class="btn btn-info btn-lg" onclick="location.reload(true)">Refresh</button>
-</div>
 
 <footer class="py-3 my-4" style="text-align:center"><a href="{{quit_url}}">Rage Quit</a></footer>
 

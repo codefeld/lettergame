@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Letter Game</title>
+    <title>Lett'er Rip!</title>
 	<link id="favicon" rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}" type="image/x-icon">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
@@ -21,6 +21,10 @@
 	</style>
   </head>
   <body>
+	<div class="container" style="text-align: center">
+	<h1>Lett'er Rip!</h1>
+	<hr class="col-3 col-md-2">
     {% block content %}{% endblock %}
+	</div>
   </body>
 </html>

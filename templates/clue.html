@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container" style="text-align: center">
 <p>Give your friend a clue by using letters from their word!</p>
 <p>Your friend's word is:</p>
 <button onclick="updateClues('{{word[0]}}')" type="button" class="btn btn-primary btn-lg">{{word[0]}}</button>
@@ -122,5 +121,4 @@ function backspace() {
 	}
 }
 </script>
-</div>
 {% endblock %}
