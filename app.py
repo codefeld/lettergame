@@ -80,10 +80,6 @@ class Game(db.Model):
 def index():
 	return render_template("index.html")
 
-@app.route("/hello/<string:name>/")
-def hello(name):
-	return render_template("hello.html", name=name)
-
 @app.route("/game/new", methods = ['POST'])
 def new_game():
 	game = Game()
@@ -113,10 +109,11 @@ def give_clue(key):
 def guess(key):
 	game = Game.query.filter_by(key=key).first()
 	clue_url = "/game/{}/clue".format(game.key)
+	quit_url = "/game/{}/quit".format(game.key)
 	print(game.word)
 	print(game.clues)
 	if request.method == "GET":
-		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False)
+		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url)
 	elif request.method == "POST":
 		form_data = request.form
 		print(form_data)
@@ -128,7 +125,16 @@ def guess(key):
 			total_guesses = len(game.guesses)
 			return render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
 		else:
-			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url)
+			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url)
+
+@app.route("/game/<string:key>/quit")
+def quit(key):
+	game = Game.query.filter_by(key=key).first()
+	print(game.word)
+	print(game.clues)
+	total_clues = len(game.clues)
+	total_guesses = len(game.guesses)
+	return render_template("rage.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
 
 if __name__ == "__main__":
 	app.run()

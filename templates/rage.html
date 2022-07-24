@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container" style="text-align: center">
+<h1>YOU <span style="color:red">RAGE QUIT!</span></h1>
+<p>Your word was:</p>
+<strong>{{word}}</strong>
+<p>&nbsp;</p>
+<table class="table">
+	<tbody>
+	  <tr>
+		<th scope="row">Guesses:</th>
+		<td>{{total_guesses}}</td>
+	  </tr>
+	  <tr>
+		<th scope="row">Clues:</th>
+		<td>{{total_clues}}</td>
+	  </tr>
+	</tbody>
+  </table>
+<hr class="col-3 col-md-2">
+<button onclick="window.location.href='https://'+window.location.host" type="button" class="btn btn-success">Home</button>
+</div>
+{% endblock %}
