@@ -2,17 +2,17 @@
 {% block content %}
 <p>Give your friend a clue by using letters from their word! (Hint: using fewer blue letters makes for a better hint)</p>
 <p>Your friend's word is:</p>
-<button onclick="updateClues('{{word[0]}}')" type="button" class="btn btn-primary btn-lg">{{word[0]}}</button>
-<button onclick="updateClues('{{word[1]}}')" type="button" class="btn btn-primary btn-lg">{{word[1]}}</button>
-<button onclick="updateClues('{{word[2]}}')" type="button" class="btn btn-primary btn-lg">{{word[2]}}</button>
-<button onclick="updateClues('{{word[3]}}')" type="button" class="btn btn-primary btn-lg">{{word[3]}}</button>
-<button onclick="updateClues('{{word[4]}}')" type="button" class="btn btn-primary btn-lg">{{word[4]}}</button>
+<button onclick="updateClues('{{word[0]}}', '1')" type="button" class="btn btn-primary btn-lg">{{word[0]}}</button>
+<button onclick="updateClues('{{word[1]}}', '2')" type="button" class="btn btn-primary btn-lg">{{word[1]}}</button>
+<button onclick="updateClues('{{word[2]}}', '3')" type="button" class="btn btn-primary btn-lg">{{word[2]}}</button>
+<button onclick="updateClues('{{word[3]}}', '4')" type="button" class="btn btn-primary btn-lg">{{word[3]}}</button>
+<button onclick="updateClues('{{word[4]}}', '5')" type="button" class="btn btn-primary btn-lg">{{word[4]}}</button>
 <hr class="col-3 col-md-2">
 <p>You can also use these extra letters or a wild card.</p>
 {% for letter in letters %}
-<button onclick="updateClues('{{letter}}')" type="button" class="btn btn-warning btn-lg">{{letter}}</button>
+<button onclick="updateClues('{{letter}}', '')" type="button" class="btn btn-warning btn-lg">{{letter}}</button>
 {% endfor %}
-<button onclick="updateClues('*')" type="button" class="btn btn-secondary btn-lg">*</button>
+<button onclick="updateClues('*', '')" type="button" class="btn btn-secondary btn-lg">*</button>
 <hr class="col-3 col-md-2">
 <p>Your clue will be:</p>
 <div><strong id="clue_show"></strong></div>
@@ -35,7 +35,7 @@ window.addEventListener("load", function(){
 	clueElement.value = ""
 });
 
-function updateClue(letter) {
+function updateClueShow(letter) {
 	const span = document.createElement("span")
 	const node = document.createTextNode(letter)
 	span.appendChild(node)
@@ -44,22 +44,10 @@ function updateClue(letter) {
 	element.appendChild(span)
 }
 
-function updateClueClue(letter) {
+function updateClueClue(letter, i) {
 	style = "btn btn-warning btn-lg"
-	if (word.indexOf(letter) === 0) {
-		letter = "1"
-		style = "btn btn-primary btn-lg"
-	} else if (word.indexOf(letter) === 1) {
-		letter = "2"
-		style = "btn btn-primary btn-lg"
-	} else if (word.indexOf(letter) === 2) {
-		letter = "3"
-		style = "btn btn-primary btn-lg"
-	} else if (word.indexOf(letter) === 3) {
-		letter = "4"
-		style = "btn btn-primary btn-lg"
-	} else if (word.indexOf(letter) === 4) {
-		letter = "5"
+	if (word.indexOf(letter) >= 0) {
+		letter = i
 		style = "btn btn-primary btn-lg"
 	} else if (letter === "*") {
 		style = "btn btn-secondary btn-lg"
@@ -77,27 +65,19 @@ function updateClueClue(letter) {
 	element2.appendChild(space)
 }
 
-function updateClueForm(letter) {
-	if (word.indexOf(letter) === 0) {
-		letter = "1"
-	} else if (word.indexOf(letter) === 1) {
-		letter = "2"
-	} else if (word.indexOf(letter) === 2) {
-		letter = "3"
-	} else if (word.indexOf(letter) === 3) {
-		letter = "4"
-	} else if (word.indexOf(letter) === 4) {
-		letter = "5"
+function updateClueForm(letter, i) {
+	if (word.indexOf(letter) >= 0) {
+		letter = i
 	}
 
 	const clueElement = document.getElementById("clue")
 	clueElement.value = clueElement.value + letter
 }
 
-function updateClues(letter) {
-	updateClue(letter)
-	updateClueClue(letter)
-	updateClueForm(letter)
+function updateClues(letter, i) {
+	updateClueShow(letter)
+	updateClueClue(letter, i)
+	updateClueForm(letter, i)
 }
 
 function backspace() {
