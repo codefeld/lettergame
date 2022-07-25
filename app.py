@@ -96,6 +96,7 @@ def new_game():
 def give_clue(key):
 	game = Game.query.filter_by(key=key).first()
 	cookie_game_key = request.cookies.get('game_key')
+	clue_url = "/game/{}/clue".format(game.key)
 	if cookie_game_key == game.key:
 		return render_template("cheat.html")
 	if request.method == 'GET':
@@ -108,7 +109,7 @@ def give_clue(key):
 		game.save()
 		print(game.clues)
 		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
-		return render_template("clue_share.html", clue = form_data["clue"])
+		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url)
 
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):

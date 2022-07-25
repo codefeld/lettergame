@@ -13,6 +13,8 @@
 	{% endfor %}
 	<hr class="col-3 col-md-2">
 	<button type="button" class="btn btn-success" id="share">Share</button>
+	<button type="button" class="btn btn-info" id="share"
+	onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{clue_url}}'">New Clue</button>
 </div>
 
 <script>
@@ -44,8 +46,6 @@ window.addEventListener("load", function(){
 		}
 		var text =  "Here's a clue.\n" + emoji_clue
 		navigator.share({
-		  title: 'Letter Game',
-		  url:  'https://' + window.location.host,
 		  text: text
 		}).then(() => {
 			enableViewClues()

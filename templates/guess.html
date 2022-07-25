@@ -37,18 +37,14 @@
 
 <script>
 
-window.addEventListener("load", function(){
-	const shareButton = document.getElementById("share")
-	shareButton.addEventListener('click', event => {
-		if (navigator.share) {
-		navigator.share({
-			title: 'Letter Game',
-			url: 'https://' + window.location.host + '{{clue_url}}',
-			text: 'I need a clue to guess this word.'
-		})
-		.catch(console.error);
-		}
-	});
+const shareButton = document.getElementById("share")
+shareButton.addEventListener('click', event => {
+	if (navigator.share) {
+	navigator.share({
+		text: 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
+	})
+	.catch(console.error);
+	}
 });
 
 </script>
