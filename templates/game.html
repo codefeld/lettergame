@@ -9,7 +9,7 @@
 	<button type="button" class="btn btn-primary btn-lg">5</button>
 	<hr class="col-3 col-md-2">
 	<button type="button" class="btn btn-success btn-lg" id="share">Share</button>
-	<button type="button" class="btn btn-secondary btn-lg" id="viewClues" 
+	<button type="button" class="btn btn-secondary btn-lg" id="viewClues"
 			onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{guess_url}}'" disabled>View Clues</button>
 </div>
 
@@ -17,15 +17,18 @@
 
 const shareButton = document.getElementById("share")
 shareButton.addEventListener('click', event => {
+	const toShare = 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
 	if (navigator.share) {
-	navigator.share({
-		text: 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
-	}).then(() => {
-		enableViewClues()
-	})
-	.catch(console.error);
+		navigator.share({
+			text: toShare
+		}).then(() => {
+			enableViewClues()
+		})
+		.catch(console.error);
 	} else {
-	enableViewClues()
+		enableViewClues()
+		navigator.clipboard.writeText(toShare)
+		alert("Copied to clipboard")
 	}
 });
 

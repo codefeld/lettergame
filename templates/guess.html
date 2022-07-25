@@ -39,11 +39,15 @@
 
 const shareButton = document.getElementById("share")
 shareButton.addEventListener('click', event => {
+	const toShare = 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
 	if (navigator.share) {
 	navigator.share({
-		text: 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
+		text: toShare
 	})
 	.catch(console.error);
+	} else {
+		navigator.clipboard.writeText(toShare)
+		alert("Copied to clipboard")
 	}
 });
 

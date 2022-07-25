@@ -24,7 +24,6 @@ const clue = "{{clue}}"
 window.addEventListener("load", function(){
 	const shareButton = document.getElementById("share")
 	shareButton.addEventListener('click', event => {
-	  if (navigator.share) {
 		var emoji_clue = ""
 		for (var i = 0; i < clue.length; i++) {
 			var letter = clue.charAt(i)
@@ -44,15 +43,15 @@ window.addEventListener("load", function(){
 				emoji_clue += "🟨"
 			}
 		}
-		var text =  "Here's a clue.\n" + emoji_clue
-		navigator.share({
-		  text: text
-		}).then(() => {
-			enableViewClues()
-		})
-		.catch(console.error);
+		var toShare =  "Here's a clue.\n" + emoji_clue
+	  if (navigator.share) {
+			navigator.share({
+				text: toShare
+			})
+			.catch(console.error);
 	  } else {
-		enableViewClues()
+			navigator.clipboard.writeText(toShare)
+			alert("Copied to clipboard")
 	  }
 	});
 });
