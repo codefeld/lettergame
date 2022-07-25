@@ -12,21 +12,34 @@
 	<button type="button" class="btn btn-secondary btn-lg" id="viewClues"
 			onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{guess_url}}'" disabled>View Clues</button>
 </div>
-
 <script>
 
 const shareButton = document.getElementById("share")
 shareButton.addEventListener('click', event => {
+	const toShare = 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
 	if (navigator.share) {
 		navigator.share({
-			text: 'I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}'
+			text: toShare
 		}).then(() => {
 			enableViewClues()
 		})
 		.catch(console.error);
 	} else {
+		var textArea = document.createElement("textarea");
+		textArea.value = toShare;
+
+		// Avoid scrolling to bottom
+		textArea.style.top = "0"
+		textArea.style.left = "0"
+		textArea.style.position = "fixed"
+
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+		//navigator.clipboard.writeText('I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}')
+		document.execCommand('copy');
+		textArea.hidden = true
 		enableViewClues()
-		navigator.clipboard.writeText('I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}')
 		alert("Copied to clipboard")
 	}
 });
