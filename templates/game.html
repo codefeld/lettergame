@@ -27,16 +27,13 @@ shareButton.addEventListener('click', event => {
 	} else {
 		var textArea = document.createElement("textarea");
 		textArea.value = toShare;
-
 		// Avoid scrolling to bottom
 		textArea.style.top = "0"
 		textArea.style.left = "0"
 		textArea.style.position = "fixed"
-
 		document.body.appendChild(textArea);
 		textArea.focus();
 		textArea.select();
-		//navigator.clipboard.writeText('I need a clue to guess this word. https://' + window.location.host + '{{clue_url}}')
 		document.execCommand('copy');
 		textArea.hidden = true
 		enableViewClues()

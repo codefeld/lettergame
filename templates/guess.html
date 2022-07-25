@@ -46,7 +46,17 @@ shareButton.addEventListener('click', event => {
 	})
 	.catch(console.error);
 	} else {
-		navigator.clipboard.writeText(toShare)
+		var textArea = document.createElement("textarea");
+		textArea.value = toShare;
+		// Avoid scrolling to bottom
+		textArea.style.top = "0"
+		textArea.style.left = "0"
+		textArea.style.position = "fixed"
+		document.body.appendChild(textArea);
+		textArea.focus();
+		textArea.select();
+		document.execCommand('copy');
+		textArea.hidden = true
 		alert("Copied to clipboard")
 	}
 });
