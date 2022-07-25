@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from dotenv import load_dotenv
 import os
 import os.path
@@ -78,7 +78,12 @@ class Game(db.Model):
 
 @app.route("/")
 def index():
-	return render_template("index.html")
+	cookie_game_key = request.cookies.get('game_key')
+	games = Game.query.filter_by(key=cookie_game_key).count()
+	if cookie_game_key is None or games == 0:
+		return render_template("index.html")
+	else:
+		return redirect("/game/{}/guess".format(cookie_game_key))
 
 @app.route("/game/new", methods = ['POST'])
 def new_game():
@@ -133,7 +138,9 @@ def guess(key):
 		if guess.strip().upper() == game.word:
 			total_clues = len(game.clues)
 			total_guesses = len(game.guesses)
-			return render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
+			resp = make_response(render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses))
+			resp.set_cookie('game_key', '')
+			return resp
 		else:
 			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url)
 
@@ -144,7 +151,9 @@ def quit(key):
 	print(game.clues)
 	total_clues = len(game.clues)
 	total_guesses = len(game.guesses)
-	return render_template("rage.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses)
+	resp = make_response(render_template("rage.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses))
+	resp.set_cookie('game_key', '')
+	return resp
 
 if __name__ == "__main__":
 	app.run()
