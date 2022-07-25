@@ -1,9 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
-<form action="/game/new" method="post" id="form1">
-</form>
 <p>You will be given a 5-letter mystery word to guess.</p>
 <p>Share the mystery word with your friends to get clues from them.</p>
 <hr class="col-3 col-md-2">
+<form action="/game/new" method="post" id="form1"></form>
 <button class="btn btn-success btn-lg" type="submit" form="form1" value="Submit">Begin Game</button>
 {% endblock %}
