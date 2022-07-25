@@ -128,7 +128,7 @@ def guess(key):
 	print(game.word)
 	print(game.clues)
 	if request.method == "GET":
-		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url)
+		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url, clue_url=clue_url)
 	elif request.method == "POST":
 		form_data = request.form
 		print(form_data)
