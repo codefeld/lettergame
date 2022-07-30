@@ -51,7 +51,7 @@ class Game(db.Model):
 	key = db.Column(db.String(255), unique=True, nullable=False)
 	clues = db.Column(db.PickleType)
 	guesses = db.Column(db.PickleType)
-	status = db.Column(db.String(255), nullable=False)
+	status = db.Column(db.String(255), default="active")
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
