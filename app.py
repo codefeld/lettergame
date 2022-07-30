@@ -106,7 +106,7 @@ def give_clue(key):
 		return render_template("cheat.html")
 	if request.method == 'GET':
 		letters = random_letters(game.word)
-		return render_template("clue.html", word=game.word, uuid=game.key, letters=letters)
+		return render_template("clue.html", word=game.word, uuid=game.key, letters=letters, clues=game.clues)
 	elif request.method == 'POST':
 		form_data = request.form
 		print(form_data)
@@ -114,7 +114,7 @@ def give_clue(key):
 		game.save()
 		print(game.clues)
 		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
-		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url)
+		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url, clues=game.clues)
 
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
@@ -123,6 +123,8 @@ def guess(key):
 		# todo: redirect to home if game is finished
 		pass
 	game = Game.query.filter_by(key=cookie_game_key).first()
+	if game is None:
+		return redirect("/")
 	clue_url = "/game/{}/clue".format(game.key)
 	quit_url = "/game/{}/quit".format(game.key)
 	print(game.word)

@@ -24,7 +24,42 @@
 	<input type="hidden" id="clue" name="clue" value="">
 </form>
 <button onclick="backspace()" type="button" class="btn btn-danger">Backspace</button>
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">View Given Clues</button>
 <button type="submit" form="form1" value="Submit" class="btn btn-success">Enter</button>
+<div id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+  
+	  <!-- Modal content-->
+	  <div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+			<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">✖</button>
+		</div>
+		<div class="modal-body">
+			{% if clues|length > 0 %}
+				{% for clue in clues %}
+					{% for letter in clue %}
+						{% if letter|int != 0 %}
+						<button type="button" class="btn btn-primary btn-lg">{{ letter }}</button>
+						{% elif letter == "*" %}
+						<button type="button" class="btn btn-secondary btn-lg">*</button>
+						{% else %}
+						<button type="button" class="btn btn-warning btn-lg">{{ letter }}</button>
+						{% endif %}
+					{% endfor %}
+					<hr class="col-3 col-md-2">
+				{% endfor %}
+			{% else %}
+				<p>No clues yet!</p>
+			{% endif %}
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+  
+	</div>
+  </div>
 
 <script>
 
