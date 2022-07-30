@@ -8,7 +8,7 @@
 <button onclick="updateClues('{{word[3]}}', '4')" type="button" class="btn btn-primary btn-lg">{{word[3]}}</button>
 <button onclick="updateClues('{{word[4]}}', '5')" type="button" class="btn btn-primary btn-lg">{{word[4]}}</button>
 <hr class="col-3 col-md-2">
-<p>You can also use these extra letters or a wild card.</p>
+<p>You can also use these extra letters or a wild card (Hint: use letters more than once or refresh for new letters).</p>
 {% for letter in letters %}
 <button onclick="updateClues('{{letter}}', '')" type="button" class="btn btn-warning btn-lg">{{letter}}</button>
 {% endfor %}
