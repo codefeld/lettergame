@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from flask import Flask, render_template, request, make_response, redirect
 from dotenv import load_dotenv
 import os
