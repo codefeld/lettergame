@@ -157,5 +157,9 @@ def quit(key):
 	resp.set_cookie('game_key', '')
 	return resp
 
+@app.route("/help")
+def help():
+	return render_template("help.html")
+
 if __name__ == "__main__":
 	app.run()

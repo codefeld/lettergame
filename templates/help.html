@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<p>Each game begins with a five-letter mystery word that you need to guess.
+	Before you guess the word, you will need to get clues from your friends.</p>
+<p>To get clues, share the mystery word with your friends. When you click the "share" button, it will a message and a link that's unique to your mystery word.
+	Post the message in a Slack channel, text message, or on social media. When your friends click the link, they'll be able to create clues from your mystery word.</p>
+<P>The clues will contain letters from your mystery word which you will see as blue numbers. They will also contain letters that are not in your word, which you will see as yellow letters.
+	For example, if your mystery word is LABEL, and your friend created the clue SLICE, you would see:
+</P>
+<button type="button" class="btn btn-warning btn-lg">S</button>
+<button type="button" class="btn btn-primary btn-lg">1</button>
+<button type="button" class="btn btn-warning btn-lg">I</button>
+<button type="button" class="btn btn-warning btn-lg">C</button>
+<button type="button" class="btn btn-primary btn-lg">4</button>
+<p>The S, I, and C in the clue are yellow because they are not letters in your mystery word. The L is replaced by a blue 1 (but your friend could have used 5 instead) and the E is replaced by a blue 4 because of its position in the mystery word.
+</p>
+<p>If your friend wanted to send the clue BRICK but didn't have the K as an avaliable letter, they can use an asterisk in its place. This clue would appear as:</p>
+<button type="button" class="btn btn-primary btn-lg">3</button>
+<button type="button" class="btn btn-warning btn-lg">R</button>
+<button type="button" class="btn btn-warning btn-lg">I</button>
+<button type="button" class="btn btn-warning btn-lg">C</button>
+<button type="button" class="btn btn-secondary btn-lg">*</button>
+<p>Just these two clues are probably not enough to guess the word LABEL, but after receiving several clues from your friends, you will be able to deduce the mystery word!</p>
+<p>If you get stuck, you can click the Rage Quit link.</p>
+<hr class="col-3 col-md-2">
+<button onclick="window.location.href='https://'+window.location.host" type="button" class="btn btn-success">Home</button>
+{% endblock %}
