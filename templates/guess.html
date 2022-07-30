@@ -56,7 +56,11 @@
 			{% if guesses|length > 0 %}
 				{% for guess in guesses %}
 					{% for letter in guess %}
-						<button type="button" class="btn btn-warning btn-lg">{{ letter }}</button>
+						{% if word[loop.index-1] == letter %}
+						<button type="button" class="btn btn-primary btn-lg">{{ letter }}</button>
+						{% else %}
+						<button type="button" class="btn btn-secondary btn-lg">{{ letter }}</button>
+						{% endif %}
 					{% endfor %}
 					<hr class="col-3 col-md-2">
 				{% endfor %}

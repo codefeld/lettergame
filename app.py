@@ -130,7 +130,7 @@ def guess(key):
 	print(game.word)
 	print(game.clues)
 	if request.method == "GET":
-		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url, clue_url=clue_url, guesses=game.guesses)
+		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url, clue_url=clue_url, guesses=game.guesses, word=game.word)
 	elif request.method == "POST":
 		form_data = request.form
 		print(form_data)
@@ -144,7 +144,7 @@ def guess(key):
 			resp.set_cookie('game_key', '')
 			return resp
 		else:
-			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url, guesses=game.guesses)
+			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url, guesses=game.guesses, word=game.word)
 
 @app.route("/game/<string:key>/quit")
 def quit(key):
