@@ -3,6 +3,13 @@
 	{% if wrong_guess %}
 	<p><span style = "color:red">Incorrect Guess! Try again</span></p>
 	{% endif %}
+	<p>Guess this five-letter word using the clues below!</p>
+	<button type="button" class="btn btn-primary btn-lg">1</button>
+	<button type="button" class="btn btn-primary btn-lg">2</button>
+	<button type="button" class="btn btn-primary btn-lg">3</button>
+	<button type="button" class="btn btn-primary btn-lg">4</button>
+	<button type="button" class="btn btn-primary btn-lg">5</button>
+	<hr class="col-3 col-md-2">
 	{% if clues|length > 0 %}
 		<p>Your clues are:</p>
 		{% for clue in clues %}
