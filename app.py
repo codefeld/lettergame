@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from flask import Flask, render_template, request, make_response, redirect
 from dotenv import load_dotenv
 import os
@@ -51,6 +52,7 @@ class Game(db.Model):
 	key = db.Column(db.String(255), unique=True, nullable=False)
 	clues = db.Column(db.PickleType)
 	guesses = db.Column(db.PickleType)
+	status = db.Column(db.String(255), nullable=False)
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
@@ -60,6 +62,17 @@ class Game(db.Model):
 		self.key = str(uuid.uuid4())
 		self.clues = []
 		self.guesses = []
+		self.status = "active"
+
+	def is_active(self):
+		return self.status == "active"
+
+	def end_game(self, won):
+		if won:
+			self.status = "won"
+		else:
+			self.status = "quit"
+		self.save()
 
 	def add_clue(self, clue):
 		self.clues = self.clues + [clue]
@@ -102,6 +115,10 @@ def give_clue(key):
 	game = Game.query.filter_by(key=key).first()
 	cookie_game_key = request.cookies.get('game_key')
 	clue_url = "/game/{}/clue".format(game.key)
+	if game.status != "active":
+		total_clues = len(game.clues)
+		total_guesses = len(game.guesses)
+		return render_template("results.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses, status=game.status)
 	if cookie_game_key == game.key:
 		return render_template("cheat.html")
 	if request.method == 'GET':
@@ -142,6 +159,7 @@ def guess(key):
 			total_guesses = len(game.guesses)
 			resp = make_response(render_template("win.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses))
 			resp.set_cookie('game_key', '')
+			game.end_game(True)
 			return resp
 		else:
 			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url, guesses=game.guesses, word=game.word)
@@ -155,6 +173,7 @@ def quit(key):
 	total_guesses = len(game.guesses)
 	resp = make_response(render_template("rage.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses))
 	resp.set_cookie('game_key', '')
+	game.end_game(False)
 	return resp
 
 @app.route("/help")

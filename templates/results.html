@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container" style="text-align: center">
+<h1>GAME OVER!</h1>
+{% if status == "won"}
+	<p>Your friend WON by guessing the mystery word:</p>
+{% else %}
+	<p>Your friend QUIT while guessing the mystery word:</p>
+{% endif %}
+<strong>{{word}}</strong>
+<p>&nbsp;</p>
+<table class="table">
+	<tbody>
+	  <tr>
+		<th scope="row">Guesses:</th>
+		<td>{{total_guesses}}</td>
+	  </tr>
+	  <tr>
+		<th scope="row">Clues:</th>
+		<td>{{total_clues}}</td>
+	  </tr>
+	</tbody>
+  </table>
+<hr class="col-3 col-md-2">
+<button onclick="window.location.href='https://'+window.location.host" type="button" class="btn btn-success">Home</button>
+</div>
+{% endblock %}
