@@ -32,15 +32,45 @@
 			</div>
 		</form>
 		<hr class="col-3 col-md-2">
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">View Guesses</button>
 		<button type="submit" form="form1" value="Submit" class="btn btn-success btn-lg">Enter</button>
 	{% else %}
 		<p>You don't have any clues yet!</p>
 		<hr class="col-3 col-md-2">
-	<button type="button" id="share" class="btn btn-success btn-lg">Share</button>
+		<button type="button" id="share" class="btn btn-success btn-lg">Share</button>
 	{% endif %}
 	<button type="button" class="btn btn-info btn-lg" onclick="location.reload(true)">Refresh</button>
 
 <footer class="py-3 my-4" style="text-align:center"><a href="{{quit_url}}" style="color:red">Rage Quit</a></footer>
+
+<div id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+  
+	  <!-- Modal content-->
+	  <div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Your Guesses</h5>
+			<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">✖</button>
+		</div>
+		<div class="modal-body">
+			{% if guesses|length > 0 %}
+				{% for guess in guesses %}
+					{% for letter in guess %}
+						<button type="button" class="btn btn-warning btn-lg">{{ letter }}</button>
+					{% endfor %}
+					<hr class="col-3 col-md-2">
+				{% endfor %}
+			{% else %}
+				<p>No guesses yet!</p>
+			{% endif %}
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+  
+	</div>
+  </div>
 
 <script>
 
