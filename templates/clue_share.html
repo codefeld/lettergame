@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container" style="text-align: center">
-	<p>Congrats! You've sent your friend this clue:</p>
+	<p>Congrats! You've made this clue for your friend:</p>
 	{% for letter in clue %}
 		{% if letter|int != 0 %}
 		<button type="button" class="btn btn-primary">{{ letter }}</button>
@@ -13,9 +13,11 @@
 	{% endfor %}
 	<hr class="col-3 col-md-2">
 	<button type="button" class="btn btn-success" id="share">Share</button>
-	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">View Given Clues</button>
 	<button type="button" class="btn btn-info" id="share"
 	onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{clue_url}}'">New Clue</button>
+	<br/>
+	<br/>
+	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">View Given Clues</button>
 
 	<div id="myModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
@@ -56,36 +58,42 @@
 <script>
 
 const clue = "{{clue}}"
+const mode = "{{mode}}"
 
 window.addEventListener("load", function(){
 	const shareButton = document.getElementById("share")
 	shareButton.addEventListener('click', event => {
-		var emoji_clue = ""
-		for (var i = 0; i < clue.length; i++) {
-			var letter = clue.charAt(i)
-			if (letter === "1") {
-				emoji_clue += "1️⃣"
-			} else if (letter === "2") {
-				emoji_clue += "2️⃣"
-			} else if (letter === "3") {
-				emoji_clue += "3️⃣"
-			} else if (letter === "4") {
-				emoji_clue += "4️⃣"
-			} else if (letter === "5") {
-				emoji_clue += "5️⃣"
-			} else if (letter === "*") {
-				emoji_clue += "*️⃣"
-			} else {
-				emoji_clue += "🟨"
+		var toShare = ""
+		if (mode === "guess_mode") {
+			var emoji_clue = ""
+			for (var i = 0; i < clue.length; i++) {
+				var letter = clue.charAt(i)
+				if (letter === "1") {
+					emoji_clue += "1️⃣"
+				} else if (letter === "2") {
+					emoji_clue += "2️⃣"
+				} else if (letter === "3") {
+					emoji_clue += "3️⃣"
+				} else if (letter === "4") {
+					emoji_clue += "4️⃣"
+				} else if (letter === "5") {
+					emoji_clue += "5️⃣"
+				} else if (letter === "*") {
+					emoji_clue += "*️⃣"
+				} else {
+					emoji_clue += "🟨"
+				}
 			}
+			var toShare =  "Here's a clue.\n" + emoji_clue
+		} else {
+			var toShare = "Guess this mystery word using my clues! " + window.location.protocol + '//' + window.location.host + "{{guess_url}}"
 		}
-		var toShare =  "Here's a clue.\n" + emoji_clue
-	  if (navigator.share) {
+		if (navigator.share) {
 			navigator.share({
 				text: toShare
 			})
 			.catch(console.error);
-	  } else {
+		} else {
 			var textArea = document.createElement("textarea");
 			textArea.value = toShare;
 			// Avoid scrolling to bottom

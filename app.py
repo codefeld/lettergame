@@ -133,17 +133,23 @@ def give_clue(key):
 		print(form_data)
 		game.add_clue(form_data["clue"])
 		game.save()
+		guess_url = "/game/{}/guess".format(game.key)
 		print(game.clues)
 		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
-		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url, clues=game.clues)
+		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url, guess_url=guess_url, clues=game.clues, mode=game.mode)
 
 @app.route("/game/<string:key>/guess", methods = ['POST', 'GET'])
 def guess(key):
 	cookie_game_key = request.cookies.get('game_key')
+	game = None
 	if key != cookie_game_key:
-		# todo: redirect to home if game is finished
-		pass
-	game = Game.query.filter_by(key=cookie_game_key).first()
+		game = Game.query.filter_by(key=key).first()
+		if not game.is_active():
+			total_clues = len(game.clues)
+			total_guesses = len(game.guesses)
+			return render_template("results.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses, status=game.status)
+	else:
+		game = Game.query.filter_by(key=cookie_game_key).first()
 	if game is None:
 		return redirect("/")
 	clue_url = "/game/{}/clue".format(game.key)
@@ -151,7 +157,9 @@ def guess(key):
 	print(game.word)
 	print(game.clues)
 	if request.method == "GET":
-		return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url, clue_url=clue_url, guesses=game.guesses, word=game.word)
+		resp = make_response(render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=False, quit_url=quit_url, clue_url=clue_url, guesses=game.guesses, word=game.word))
+		resp.set_cookie('game_key', game.key)
+		return resp
 	elif request.method == "POST":
 		form_data = request.form
 		print(form_data)
@@ -166,7 +174,9 @@ def guess(key):
 			game.end_game(True)
 			return resp
 		else:
-			return render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url, guesses=game.guesses, word=game.word)
+			resp = make_response(render_template("guess.html", uuid=game.key, clues=game.clues, wrong_guess=True, clue_url=clue_url, quit_url=quit_url, guesses=game.guesses, word=game.word))
+			resp.set_cookie('game_key', game.key)
+			return resp
 
 @app.route("/game/<string:key>/quit")
 def quit(key):
