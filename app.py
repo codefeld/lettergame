@@ -52,6 +52,7 @@ class Game(db.Model):
 	clues = db.Column(db.PickleType)
 	guesses = db.Column(db.PickleType)
 	status = db.Column(db.String(255), default="active")
+	mode = db.Column(db.String(255), default="guess_mode")
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
@@ -62,6 +63,10 @@ class Game(db.Model):
 		self.clues = []
 		self.guesses = []
 		self.status = "active"
+		self.mode = "guess_mode"
+
+	def clue_mode(self):
+		self.mode = "clue_mode"
 
 	def is_active(self):
 		return self.status == "active"
@@ -178,6 +183,19 @@ def quit(key):
 @app.route("/help")
 def help():
 	return render_template("help.html")
+
+@app.route("/clues/new", methods = ['POST'])
+def new_clues_game():
+	game = Game()
+	game.clue_mode()
+	clue_url = "/game/{}/clue".format(game.key)
+	print( "http://127.0.0.1:5000{}".format(clue_url))
+	print(game.word)
+	game.save()
+	letters = random_letters(game.word)
+	resp = make_response(redirect(clue_url))
+	resp.set_cookie('clue_key', game.key)
+	return resp
 
 if __name__ == "__main__":
 	app.run()
