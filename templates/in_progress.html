@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container" style="text-align: center">
+<h1>Game In-Progress</h1>
+<p>You can't start a new game because you already have a game in-progress. Return to that game and finish it or Rage Quit.</p>
+<hr class="col-3 col-md-2">
+<button onclick="window.location.href='https://'+window.location.host" type="button" class="btn btn-success">Return to Game</button>
+</div>
+{% endblock %}

@@ -53,6 +53,7 @@ class Game(db.Model):
 	guesses = db.Column(db.PickleType)
 	status = db.Column(db.String(255), default="active")
 	mode = db.Column(db.String(255), default="guess_mode")
+	parent_key = db.Column(db.String(255))
 
 	def __init__(self):
 		f = open(os.path.join("data", "words.txt"))
@@ -67,6 +68,9 @@ class Game(db.Model):
 
 	def clue_mode(self):
 		self.mode = "clue_mode"
+
+	def is_clue_mode(self):
+		return self.mode == "clue_mode"
 
 	def is_active(self):
 		return self.status == "active"
@@ -89,6 +93,13 @@ class Game(db.Model):
 	def save(self):
 		db.session.add(self)
 		db.session.commit()
+
+	def copy(self):
+		g = Game()
+		g.parent_key = self.key
+		g.word = self.word
+		g.clues = self.clues
+		return g
 
 	def __repr__(self):
 		return f'Game is {self.key}'
@@ -114,15 +125,40 @@ def new_game():
 	resp.set_cookie('game_key', game.key)
 	return resp
 
+@app.route("/game/new/<string:key>", methods = ['GET'])
+def fork_game(key):
+	cookie_clue_key = request.cookies.get('clue_key')
+	if key == cookie_clue_key:
+		return redirect("/game/{}/clue".format(key))
+
+	cookie_game_key = request.cookies.get('game_key')
+	game = Game.query.filter_by(key=cookie_game_key).first()
+	if game != None:
+		if game.parent_key == key:
+			return redirect("/game/{}/guess".format(game.key))
+		else:
+			return render_template("in_progress.html")
+	else:
+		game = Game.query.filter_by(key=key).first()
+		new_game = game.copy()
+		new_game.save()
+		game.end_game(False) # make the old game inactive so no new clues are created, and everyone is playing fair
+		return redirect("/game/{}/guess".format(new_game.key))
+
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
 	game = Game.query.filter_by(key=key).first()
 	cookie_game_key = request.cookies.get('game_key')
 	clue_url = "/game/{}/clue".format(game.key)
 	if game.status != "active":
-		total_clues = len(game.clues)
-		total_guesses = len(game.guesses)
-		return render_template("results.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses, status=game.status)
+		if game.is_clue_mode():
+			pass
+			child_games = Game.query.filter_by(parent_key=key).all()
+			return render_template("results_clue.html", child_games=child_games)
+		else:
+			total_clues = len(game.clues)
+			total_guesses = len(game.guesses)
+			return render_template("results.html", word=game.word, total_clues=total_clues, total_guesses=total_guesses, status=game.status)
 	if cookie_game_key == game.key:
 		return render_template("cheat.html")
 	if request.method == 'GET':
@@ -133,7 +169,7 @@ def give_clue(key):
 		print(form_data)
 		game.add_clue(form_data["clue"])
 		game.save()
-		guess_url = "/game/{}/guess".format(game.key)
+		guess_url = "/game/new/{}".format(game.key)
 		print(game.clues)
 		print("http://127.0.0.1:5000/game/{}/guess".format(game.key))
 		return render_template("clue_share.html", clue = form_data["clue"], clue_url=clue_url, guess_url=guess_url, clues=game.clues, mode=game.mode)
