@@ -148,7 +148,11 @@ def show_results_clue(key):
 	game = Game.query.filter_by(key=key).first()
 	clue_url = "/game/{}/clue".format(game.key)
 	child_games = Game.query.filter_by(parent_key=key).all()
-	return render_template("results_clue.html", child_games=child_games, word=game.word, clue_url=clue_url)
+	child_games_with_guesses = []
+	for child_game in child_games:
+		if len(child_game.guesses) > 0:
+			child_games_with_guesses.append(child_game)
+	return render_template("results_clue.html", child_games=child_games_with_guesses, word=game.word, clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
