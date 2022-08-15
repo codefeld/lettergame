@@ -146,8 +146,9 @@ def fork_game(key):
 @app.route("/game/<string:key>/results")
 def show_results_clue(key):
 	game = Game.query.filter_by(key=key).first()
+	clue_url = "/game/{}/clue".format(game.key)
 	child_games = Game.query.filter_by(parent_key=key).all()
-	return render_template("results_clue.html", child_games=child_games, word=game.word)
+	return render_template("results_clue.html", child_games=child_games, word=game.word, clue_url=clue_url)
 
 @app.route("/game/<string:key>/clue", methods = ['POST', 'GET'])
 def give_clue(key):
