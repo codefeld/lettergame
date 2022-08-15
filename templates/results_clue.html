@@ -2,12 +2,13 @@
 {% block content %}
 <div class="container" style="text-align: center">
 <h1>Results</h1>
+<strong>{{word}}</strong>
 {% if child_games|length == 0 %}
 	<p>No one has started guessing your word yet!</p>
 {% else %}
 	{% for game in child_games %}
-		<hr class="col-3 col-md-2">
-		<table class="table">
+	<hr class="col-3 col-md-2">
+		<table class="table table-sm table-bordered">
 			<tbody>
 				<tr>
 				<th scope="row">Guesses:</th>
@@ -18,17 +19,16 @@
 				{% if game.status == "won" %}
 					<td><b style="color:green">WON</b></td>
 				{% elif game.status == "active" %}
-					<td><b style="color:yellow">IN PROGRESS</b></td>
+					<td><b style="color:orange">IN PROGRESS</b></td>
 				{% else %}
 					<td><b style="color:red">QUIT</b></td>
 				{% endif %}
 				</tr>
 			</tbody>
 		</table>
-		<hr class="col-3 col-md-2">
 	{% endfor %}
+	<hr class="col-3 col-md-2">
 {% endif %}
-<hr class="col-3 col-md-2">
 <button onclick="window.location.href='https://'+window.location.host" type="button" class="btn btn-success">Home</button>
 </div>
 {% endblock %}

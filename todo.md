@@ -1,3 +1,3 @@
 # todo items
 
-* Warn that starting a new game will end current game
+* Put new clue button on results_clue page

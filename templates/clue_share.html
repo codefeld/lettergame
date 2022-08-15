@@ -15,6 +15,10 @@
 	<button type="button" class="btn btn-success" id="share">Share</button>
 	<button type="button" class="btn btn-info" id="share"
 	onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{clue_url}}'">New Clue</button>
+	{% if mode != "guess_mode" %}
+		<button type="button" class="btn btn-success" id="share"
+		onclick="window.location.href=window.location.protocol + '//' + window.location.host + '{{results_clue_url}}'">Results</button>
+	{% endif %}
 	<br/>
 	<br/>
 	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">View All Clues</button>
